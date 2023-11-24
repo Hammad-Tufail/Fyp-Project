@@ -1,5 +1,5 @@
 import Home from './pages/home/Home';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import Users from './pages/users/Users';
 import Products from './pages/products/Products';
 import Navbar from './components/navbar/Navbar';
@@ -24,6 +24,12 @@ import BlogLayout from './layout/BlogLayout';
 import BlogHomePage from './pages/Blog/BlogHomePage';
 import Article from './pages/Blog/Article';
 import ArticleDetail from './pages/Blog/ArticleDetail';
+import ProfilePage from './pages/profile/ProfilePage';
+import ProfileLayout from './layout/ProfileLayout';
+import DoctorProfile from './pages/doctor/DoctorProfile';
+import AppointmentsPage from './pages/doctor/AppointmentsPage';
+import DoctorProfilePage from './pages/doctor/DoctorProfilePage';
+
 
 
 
@@ -51,16 +57,22 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
+        <Route path='profile' element={<ProfileLayout />}>
+          <Route path='/profile/user' element={<ProfilePage />} />
 
+
+        </Route>
+        <Route path="/" element={<Navigate to={"/homepage"} />} />
         <Route path='homepage' element={<HomepageLayout />}>
           <Route path='/homepage/' element={<Homepage />} />
           <Route path='/homepage/login' element={<Login />} />
           <Route path='/homepage/signup' element={<Signup />} />
+          <Route path='/homepage/profile' element={<ProfilePage />} />
 
         </Route>
-        <Route path='blog'element={<BlogLayout/>}>
-        <Route path='/blog/' element={<BlogHomePage />} />
-        <Route path='/blog/article' element={<ArticleDetail />} />
+        <Route path='blog' element={<BlogLayout />}>
+          <Route path='/blog/' element={<BlogHomePage />} />
+          <Route path='/blog/article' element={<ArticleDetail />} />
 
         </Route>
         <Route path="admin" element={<Layout />}>
@@ -77,7 +89,9 @@ function App() {
         <Route path="doctor" element={<DoctorLayout />}>
           <Route path="/doctor/" element={<DoctorHome />} />
           <Route path="/doctor/doctordetails" element={<DoctorDetails />} />
-
+          <Route path="/doctor/doctorprofile" element={<DoctorProfile />} />
+          //<Route path="/doctor/appointmentspage" element={<AppointmentsPage />} />
+          <Route path="/doctor/doctorprofilepage" element={<DoctorProfilePage />} />
           <Route path="/doctor/doctors" element={<Doctors />} />
           <Route path="/doctor/doctorservices" element={<DoctorServices />} />
           <Route path="/doctor/otherclinics" element={<Clinics />} />

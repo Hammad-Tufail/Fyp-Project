@@ -33,6 +33,19 @@ const ProfilePage = () => {
     };
 
     return (
+        <div className="flex">
+        {/* Sidebar */}
+        <div className="w-64 h-screen bg-white shadow-md">
+            <div className="flex flex-col p-4">
+                <Link to="/doctor/doctorprofile" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"> <button >Overview</button> </Link>
+                <Link to="/doctor/appointmentspage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200">
+                    <button >Appointments</button> </Link>
+                    <Link to="/doctor/doctorprofilepage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"><button >Profile</button> </Link>
+                <button className="py-2 mb-2 text-sm text-white bg-primaryColor hover:bg-gray-400">Logout</button>
+
+            </div>
+        </div>
+        
         <section className="container mx-auto px-5 py-10">
             <div className="w-full max-w-sm mx-auto">
                 <div className="flex items-center mb-4">
@@ -145,6 +158,7 @@ const ProfilePage = () => {
                 ) : null}
             </div>
         </section>
+        </div>
     );
 };
 

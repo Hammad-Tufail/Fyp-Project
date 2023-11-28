@@ -24,11 +24,12 @@ import BlogLayout from './layout/BlogLayout';
 import BlogHomePage from './pages/Blog/BlogHomePage';
 import Article from './pages/Blog/Article';
 import ArticleDetail from './pages/Blog/ArticleDetail';
-import ProfilePage from './pages/profile/ProfilePage';
+// import ProfilePage from './pages/profile/ProfilePage';
 import ProfileLayout from './layout/ProfileLayout';
 import DoctorProfile from './pages/doctor/DoctorProfile';
 import AppointmentsPage from './pages/doctor/AppointmentsPage';
 import DoctorProfilePage from './pages/doctor/DoctorProfilePage';
+import UserAccount from './pages/UserDashboard/UserAccount';
 
 
 
@@ -58,7 +59,7 @@ function App() {
     createRoutesFromElements(
       <>
         <Route path='profile' element={<ProfileLayout />}>
-          <Route path='/profile/user' element={<ProfilePage />} />
+          <Route path='/profile/user' element={<UserAccount />} />
 
 
         </Route>
@@ -67,7 +68,7 @@ function App() {
           <Route path='/homepage/' element={<Homepage />} />
           <Route path='/homepage/login' element={<Login />} />
           <Route path='/homepage/signup' element={<Signup />} />
-          <Route path='/homepage/profile' element={<ProfilePage />} />
+          {/* <Route path='/homepage/profile' element={<ProfilePage />} /> */}
 
         </Route>
         <Route path='blog' element={<BlogLayout />}>

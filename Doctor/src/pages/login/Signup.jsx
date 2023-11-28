@@ -4,6 +4,7 @@ import "../../App.css";
 import { useUser } from '../../context/UserContext';
 import { doctorSignUp } from "../../services/auth.services";
 import { useSnackbar } from 'notistack'
+
 function Signup() {
   const navigate = useNavigate();
   const [userContext, setUserContext] = useUser();

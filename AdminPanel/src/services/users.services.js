@@ -1,12 +1,19 @@
-// import getAxiosInstance from './axiosProvider';
+import getAxiosInstance from './axiosProvider';
 
-// export async function addUser({}) {
-//     let axiosInstance = getAxiosInstance();
-//     let response = await axiosInstance.get('/users',
-//         {
-//             email: email,
-//             password: password
-//         }
-//     );
-//     return response;
-// }
+export async function viewUsers(token) {
+    let axiosInstance = getAxiosInstance(token);
+    let response = await axiosInstance.get('/users')
+    return response;
+}
+
+export async function editUser(token, userId, name, number) {
+    let axiosInstance = getAxiosInstance(token);
+    let response = await axiosInstance.put(`/users/${userId}`)
+    return response;
+}
+
+export async function deleteUser(token, userId) {
+    let axiosInstance = getAxiosInstance(token);
+    let response = await axiosInstance.delete(`/users/${userId}`)
+    return response;
+}

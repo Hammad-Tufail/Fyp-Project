@@ -28,6 +28,7 @@ const User = new Schema({
     refreshTokens: {
         type: [Session],
     },
+    appointments: [{ type: mongoose.Types.ObjectId, ref: "Appointment" }],
 })
 
 module.exports = mongoose.model("User", User)

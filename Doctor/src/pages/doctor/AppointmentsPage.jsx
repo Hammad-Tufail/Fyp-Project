@@ -16,6 +16,11 @@ const AppointmentsPage = () => {
     // ... more appointments
   ];
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       <div className="w-64 h-screen bg-white shadow-md">
@@ -23,16 +28,7 @@ const AppointmentsPage = () => {
           <Link to="/doctorprofile" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"> <button >Overview</button> </Link>
           <Link to="/appointmentspage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"><button >Appointments</button> </Link>
           <Link to="/doctorprofilepage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"><button >Profile</button> </Link>
-          <button onClick={() => {
-            doctorLogOut(userContext.token).then(
-              (data) => {
-                setUserContext(oldValues => {
-                  return { ...oldValues, token: null }
-                })
-                navigate('/')
-              }
-            )
-          }} className="py-2 mb-2 text-sm text-white bg-primaryColor hover:bg-gray-400">Logout</button>
+          <button onClick={handleLogOut} className="py-2 mb-2 text-sm text-white bg-primaryColor hover:bg-gray-400">Logout</button>
 
         </div>
       </div>

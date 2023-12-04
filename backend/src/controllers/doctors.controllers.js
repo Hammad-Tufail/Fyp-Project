@@ -1,9 +1,8 @@
-
 const cookiesOptions = require('../../config/cookiesConfig');
-const doctorServices = require('../services/doctors.services');
+const { doctorServices } = require('../services/doctors.services');
 const { dataResponse, messageResponse } = require('../utils/commonResponse');
-const multerFilesParser = require("../utils/multerFilesParser");
-
+const { multerFilesParser } = require("../utils/multerFilesParser");
+const Doctor = require("../models/doctor.model");
 
 /*Handlers for Doctor Role*/
 
@@ -44,7 +43,12 @@ async function viewMyProfile(req, res, next) {
 
         let doctor = await doctorServices.getDoctorProfile(doctorId);
 
+        // const {password, ...rest} = doctor._doc;
+        // const appointments = await Booking.find({doctor:doctorId})
+
         return res.send(dataResponse("success", { doctor }));
+
+
     }
     catch (error) {
         return next(error);
@@ -99,16 +103,16 @@ async function addDoctor(req, res, next) {
     }
 }
 
-async function deleteDoctor(req, res, next) {
-    try {
-        const doctorId = req.params.doctorId;
-        await doctorServices.deleteDoctor(doctorId);
-        return res.status(200).send(messageResponse("success", "Doctor has been deleted successfully"));
-    }
-    catch (error) {
-        return next(error);
-    }
-}
+// async function deleteDoctor(req, res, next) {
+//     try {
+//         const doctorId = req.params.doctorId;
+//         await doctorServices.deleteDoctor(doctorId);
+//         return res.status(200).send(messageResponse("success", "Doctor has been deleted successfully"));
+//     }
+//     catch (error) {
+//         return next(error);
+//     }
+// }
 
 async function editDoctor(req, res, next) {
     try {
@@ -168,8 +172,91 @@ async function updateMyProfile(req, res, next) {
     }
 }
 
+////////////////////////////////////I ADDED//////////////////////////////
+
+async function getAllDoctor(req, res) {
+    try {
+        const { query } = req.query
+        let doctors;
+
+        if (query) {
+            doctors = await Doctor.find({
+                isApproved: 'approved',
+                $or: [
+                    { name: { $regex: query, $options: 'i' } },
+                    { specialization: { $regex: query, $options: 'i' } },
+
+                ],
+            }).select('-password');
+
+        } else {
+            doctors = await Doctor.find({ isApproved: 'approved' }).select('-password');
+
+        }
+        res.status(200).json({
+            success: true,
+            message: "Doctor found",
+            data: doctors,
+        });
+    } catch (err) {
+        res.status(404).json({ success: false, message: "Not Found" })
+    }
+}
+async function getSingleDoctor(req, res, next) {
+    const id = req.params.id;
+    try {
+        const doctor = await Doctor.findById(id).populate('reviews').select('-password');
+        res.status(200).json({
+            success: true,
+            message: 'Doctor found',
+            data: doctor,
+        })
+    }
+    catch (err) {
+        res.status(404).json({ success: false, message: 'No doctor found' })
+    }
+}
+async function updateDoctor(req, res) {
+    const id = req.params.id;
+    try {
+        const updatedDoctor = await Doctor.findByIdAndUpdate(
+            id,
+            { $set: req.body },
+            { new: true },
+        )
+        res
+            .status(200)
+            .json({
+                success: true,
+                message: 'Successfully updated',
+                data: updatedDoctor,
+            });
+    }
+    catch (err) {
+        res.status(500).json({ success: false, message: "Failed to update" })
+    }
+}
+
+async function deleteDoctor(req, res) {
+    const id = req.params.id;
+    try {
+        await Doctor.findByIdAndDelete(id)
+        res
+            .status(200)
+            .json({
+                success: true,
+                message: 'Successfully deleted',
+
+            });
+    }
+    catch (err) {
+        res.status(500).json({ success: false, message: "Failed to delete" })
+    }
+}
+
 module.exports = {
     signup, signin, viewMyProfile, refreshTokenCall, signout,
 
-    addDoctor, deleteDoctor, viewSpecificDoctor, editDoctor, viewDoctors, updateMyProfile
+    addDoctor, deleteDoctor, viewSpecificDoctor, editDoctor, viewDoctors, updateMyProfile, getAllDoctor,
+    updateDoctor, getSingleDoctor
 }

@@ -30,6 +30,7 @@ import DoctorProfile from './pages/doctor/DoctorProfile';
 import AppointmentsPage from './pages/doctor/AppointmentsPage';
 import DoctorProfilePage from './pages/doctor/DoctorProfilePage';
 import UserAccount from './pages/UserDashboard/UserAccount';
+import Chat from './pages/Chat/Chat';
 
 
 
@@ -96,6 +97,7 @@ function App() {
           <Route path="/doctor/doctors" element={<Doctors />} />
           <Route path="/doctor/doctorservices" element={<DoctorServices />} />
           <Route path="/doctor/otherclinics" element={<Clinics />} />
+          <Route path="/doctor/chat" element={<Chat />} />
 
 
         </Route>

@@ -1,76 +1,85 @@
 import DataTable from "../../components/dataTable/DataTable";
 import "./users.scss";
 import { useEffect, useState } from "react";
-import Add from "../../components/add/Add";
-import { userRows } from "../../data";
-import axios, { Axios } from "axios";
+import { useUser } from "../../context/UserContext"
+import { viewUsers } from "../../services/users.services";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 90 },
+  { field: "id", headerName: "ID", width: 10 },
+  {
+    field: "img",
+    headerName: "Avatar",
+    width: 100,
+    renderCell: (params) => {
+      return <img src={params.row.img || "/noavatar.png"} alt="" />;
+    },
+  },
   {
     field: "name",
     type: "string",
     headerName: "Name",
-    width: 120,
+    width: 160,
   },
   {
     field: "email",
     type: "string",
     headerName: "Email",
-    width: 150,
+    width: 180,
   },
   {
-    field: "phone",
+    field: "number",
     type: "string",
-    headerName: "Phone",
-    width: 150,
+    headerName: "Number",
+    width: 180,
   },
   {
-    field: "createdAt",
+    field: "createdDate",
     headerName: "Created At",
-    width: 150,
+    width: 110,
     type: "string",
   },
   {
-    field: "verified",
-    headerName: "Verified",
-    width: 150,
+    field: "active",
+    headerName: "Active",
+    width: 80,
     type: "boolean",
   },
 ];
 
 const Users = () => {
-
+  const [userContext, setUserContext] = useUser();
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState([]);
 
   const getUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/admins/users");
-      console.log(response);
-      const allUsers = response.data.users;
-      console.log(allUsers);
-      setUsers(allUsers);
+      const response = await viewUsers(userContext.token);
 
-    }
-    catch (error) {
-      console.log(error)
+      console.log(response);
+      const users = response?.data?.data?.users?.map((user, index) => ({
+        ...user,
+        id: index + 1,
+      }));
+      setUsers(users);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     getUsers();
-  }, [])
+  }, []);
 
   return (
     <div className="users">
       <div className="info">
         <h1>Users</h1>
-        <button onClick={() => setOpen(true)}>Add New User</button>
-      </div>
-      <DataTable slug="users" columns={columns} rows={userRows} />
 
-      {open && <Add slug="user" columns={columns} setOpen={setOpen} />}
+      </div>
+
+      <DataTable slug="users" columns={columns} rows={users} setRows={setUsers} />
+
+
     </div>
   );
 };

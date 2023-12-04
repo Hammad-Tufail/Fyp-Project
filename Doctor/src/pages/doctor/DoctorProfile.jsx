@@ -9,12 +9,12 @@ const DoctorProfile = () => {
     const navigate = useNavigate();
     // Replace with actual data fetched from an API or state management
     const [doctorProfile, setDoctorProfile] = useState({
-        name: "Dylan Kaufman",
+        name: "",
         reviews: 0,
-        about: "Lorem ipsum dolor sit amet...",
-        education: "Harvard University, MD",
-        experience: "10 years at General Hospital",
-        imageUrl: "/path-to-doctor-image.jpg", // Replace with actual image path
+        about: "",
+        education: "",
+        experience: "",
+        imageUrl: "", // Replace with actual image path
     });
     const [userContext, setUserContext] = useUser();
     const { enqueueSnackbar } = useSnackbar();
@@ -26,6 +26,12 @@ const DoctorProfile = () => {
             ))
         })
     }, [])
+
+    const handleLogOut = () => {
+        localStorage.clear();
+        navigate("/login");
+      };
+      
     return (
         <div className="flex">
             {/* Sidebar */}
@@ -35,16 +41,7 @@ const DoctorProfile = () => {
                     <Link to="/appointmentspage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200">
                         <button >Appointments</button> </Link>
                     <Link to="/doctorprofilepage" className="py-2 mb-2 text-sm text-gray-700 rounded hover:bg-gray-200"><button >Profile</button> </Link>
-                    <button onClick={() => {
-                        doctorLogOut(userContext.token).then(
-                            (data) => {
-                                setUserContext(oldValues => {
-                                    return { ...oldValues, token: null }
-                                })
-                                navigate('/')
-                            }
-                        )
-                    }} className="py-2 mb-2 text-sm text-white bg-primaryColor hover:bg-gray-400">Logout</button>
+                    <button onClick={handleLogOut} className="py-2 mb-2 text-sm text-white bg-primaryColor hover:bg-gray-400">Logout</button>
 
                 </div>
             </div>

@@ -7,9 +7,10 @@ import { Outlet } from 'react-router-dom';
 const DoctorLayout = () => {
     return <>
             <Header />
-            <main>
+            <main >
                 <Outlet />
             </main>
+            <Card />
             <Footer />
         </>
     

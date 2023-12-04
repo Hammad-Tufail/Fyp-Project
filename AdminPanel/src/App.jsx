@@ -1,6 +1,7 @@
 import Home from './pages/home/Home';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Outlet, Navigate, Routes } from "react-router-dom";
 import Users from './pages/users/Users';
+import Doctors from './pages/users/Doctors';
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 import Menu from './components/menu/Menu';
@@ -88,13 +89,10 @@ function App() {
             <Route path="/admin" element={<Layout />}>
               <Route path="/admin/" element={<Home />} />
               <Route path="/admin/users" element={<Users />} />
+              <Route path="/admin/doctors" element={<Doctors />} />
               <Route path="/admin/products" element={<Products />} />
-              <Route path="/admin/users/1" element={<User />} />
+              <Route path="/admin/users/:userId" element={<User />} />
               <Route path="/admin/orders" element={<User />} />
-
-              admin/orders
-
-
             </Route>
           </Routes>
 

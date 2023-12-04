@@ -15,6 +15,7 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    number: "",
     // userPhoto: null,
   });
 
@@ -80,7 +81,11 @@ function Signup() {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
-
+    // Validate phone number as 11-digit number
+    const phoneRegex = /^\d{11}$/;
+    if (!formData.number.match(phoneRegex)) {
+      newErrors.number = "Invalid Phone Number (should be 11 digits)";
+    }
     setErrors(newErrors);
 
     // Return true if there are no errors
@@ -158,6 +163,28 @@ function Signup() {
               />
               {errors.email && (
                 <p className="text-red-500 mt-1">{errors.email}</p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="number"
+                className="block text-gray-600 text-sm font-semibold mb-2"
+              >
+                Phone Number
+              </label>
+              <input
+                type="number"
+                id="number"
+                name="number"
+                placeholder="Enter your phone number"
+                className="w-full p-2 border rounded-md border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
+                value={formData.number}
+                onChange={(e) =>
+                  setFormData({ ...formData, number: e.target.value })
+                }
+              />
+              {errors.number && (
+                <p className="text-red-500 mt-1">{errors.number}</p>
               )}
             </div>
 

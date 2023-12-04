@@ -98,7 +98,6 @@ function Signup() {
       fD.append('password', formData.password);
       fD.append('specialization', formData.specialization);
       fD.append('doctorPhoto', formData.doctorPhoto);
-      // Send the form data to your backend or perform further actions
       console.log("Form data:", fD);
       signupFunction(fD);
     } else {

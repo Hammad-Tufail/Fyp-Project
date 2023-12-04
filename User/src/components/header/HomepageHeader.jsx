@@ -12,7 +12,7 @@ const navLinks = [
         path: '/blog',
         display: 'Blog'
     },
-    {
+    {  
         path: '/petshop',
         display: 'Shop'
     },
@@ -83,7 +83,7 @@ const HomepageHeader = () => {
       </figure>
     </Link>
   </div> */}
-              <Link to='/homepage/login'>
+              <Link to='/login'>
                   <button className='text-white py-0 px-0 font-[500] h-[40px] flex items-center justify-center ' >
                       Login
                   </button>

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types"; // Import PropTypes
-
 import "./barChartBox.scss";
 import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts";
 

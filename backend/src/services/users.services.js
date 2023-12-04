@@ -26,15 +26,15 @@ Expected Output
 }
 */
 
-async function signup(name, email, password){
+async function signup(name, email, password) {
 
-    if(await isUserAvailableUsingEmail(email)){
+    if (await isUserAvailableUsingEmail(email)) {
         throw new createHttpError.Conflict("User with current email already exists");
     }
 
     let hashedPassword = generateHash(password);
 
-    let user = new User({name, email, password: hashedPassword});
+    let user = new User({ name, email, password: hashedPassword });
 
     let payload = {
         id: user._id,
@@ -45,11 +45,11 @@ async function signup(name, email, password){
 
     let refreshToken = getRefreshToken(payload);
 
-    user.refreshTokens.push({refreshToken});
+    user.refreshTokens.push({ refreshToken });
 
     await user.save();
 
-    return {token, user, refreshToken};
+    return { token, user, refreshToken };
 }
 
 
@@ -72,17 +72,17 @@ Expected Output
 }
 */
 
-async function signin(email, password){
+async function signin(email, password) {
     console.log(email, password);
     let user = await getUserUsingEmail(email);
 
-    if(!user){
+    if (!user) {
         throw new createHttpError.NotFound("User with given email doesn't exist");
     }
 
     let isMatch = comparePassword(password, user.password);
 
-    if(!isMatch){
+    if (!isMatch) {
         throw new createHttpError.Unauthorized("Please provide correct credentials to login");
     }
 
@@ -95,18 +95,17 @@ async function signin(email, password){
 
     let refreshToken = getRefreshToken(payload);
 
-    user.refreshTokens.push({refreshToken});
+    user.refreshTokens.push({ refreshToken });
 
     user.save();
 
-    return {token, user, refreshToken};
+    return { token, user, refreshToken };
 }
 
-async function getUserProfile(userId){
+async function getUserProfile(userId) {
     let user = await getUserById(userId);
 
-    if(!user)
-    {
+    if (!user) {
         throw new createHttpError.NotFound("User with the given information doesn't exist")
     }
 
@@ -114,12 +113,11 @@ async function getUserProfile(userId){
 }
 
 
-async function refreshToken(userId, refreshToken){
+async function refreshToken(userId, refreshToken) {
 
     let user = await getUserById(userId);
 
-    if(!user)
-    {
+    if (!user) {
         throw new createHttpError.NotFound("User with given details doesn't exist");
     }
 
@@ -134,36 +132,35 @@ async function refreshToken(userId, refreshToken){
 
     let changed = false;
 
-    for(let i = 0; i<user.refreshTokens.length; i++){
-        if(user.refreshTokens[i].refreshToken == refreshToken){
+    for (let i = 0; i < user.refreshTokens.length; i++) {
+        if (user.refreshTokens[i].refreshToken == refreshToken) {
             user.refreshTokens[i].refreshToken = newRefreshToken;
             changed = true;
             break;
         }
     }
 
-    if(!changed){
+    if (!changed) {
         throw new createHttpError.BadRequest("Refresh Token is not valid");
     }
-    
+
     await user.save();
 
-    return {token, user, refreshToken: newRefreshToken};
+    return { token, user, refreshToken: newRefreshToken };
 }
 
-async function signout(userId, refreshToken){
+async function signout(userId, refreshToken) {
     let user = await getUserById(userId);
 
-    if(!user)
-    {
+    if (!user) {
         throw new createHttpError.NotFound("User with given details doesn't exist");
     }
 
     let refreshTokensLength = user.refreshTokens.length;
 
-    user.refreshTokens = user.refreshTokens.filter((refreshTokenObj)=>refreshTokenObj.refreshToken != refreshToken);
+    user.refreshTokens = user.refreshTokens.filter((refreshTokenObj) => refreshTokenObj.refreshToken != refreshToken);
 
-    if(refreshTokensLength <= user.refreshTokens.length ){
+    if (refreshTokensLength <= user.refreshTokens.length) {
         throw new createHttpError.NotFound("Provided refresh token doesn't exist");
     }
 
@@ -173,15 +170,15 @@ async function signout(userId, refreshToken){
 
 /*----------------------Assosiated with Admin Role------------------------*/
 
-async function addUser(name, email, password, userPhotoLink){
+async function addUser(name, email, password, userPhotoLink) {
 
-    if(await isUserAvailableUsingEmail(email)){
+    if (await isUserAvailableUsingEmail(email)) {
         throw new createHttpError.Conflict("User with current email already exists");
     }
 
     let hashedPassword = generateHash(password);
 
-    let user = new User({name, email, password: hashedPassword, userPhotoLink});
+    let user = new User({ name, email, password: hashedPassword, userPhotoLink });
 
 
     await user.save();
@@ -190,41 +187,39 @@ async function addUser(name, email, password, userPhotoLink){
 }
 
 
-async function deleteUser(userId){
+async function deleteUser(userId) {
     let user = await User.findByIdAndDelete(userId);
-    
-    if(!user)
-    {
+
+    if (!user) {
         throw new createHttpError.NotFound("User with given details doesn't exist");
     }
     //Will be implemented later//
-    
+
     return user;
 }
 
-async function editUser(userId, userObject){
+async function editUser(userId, userObject) {
     let user = await getUserById(userId);
 
     let objectToPass = {};
-    
-    if(!user)
-    {
+
+    if (!user) {
         throw new createHttpError.NotFound("User with given details doesn't exist");
     }
     //If Email is present in user Object//
-    if(userObject.email){
-        if(user.authStrategy != "local"){
+    if (userObject.email) {
+        if (user.authStrategy != "local") {
             throw new createHttpError.BadRequest("Given user is not using local authentication, So Email cannot be edited");
         }
         user.email = userObject.email;
         user.verified = false;
     }
 
-    if(userObject.name){
+    if (userObject.name) {
         user.name = userObject.name;
     }
 
-    if(userObject.userPhotoLink){
+    if (userObject.userPhotoLink) {
         user.userPhotoLink = userObject.userPhotoLink;
     }
 
@@ -234,21 +229,20 @@ async function editUser(userId, userObject){
 }
 
 
-async function viewUsers(query, limit, offset){
-    let {total, users} = await getUsersByQuery(query, limit, offset);
+async function viewUsers(query, limit, offset) {
+    let { total, users } = await getUsersByQuery(query, limit, offset);
 
-    return {total, users};
+    return { total, users };
 }
 
-async function updateProfile(userId, name, email, userPhotoLink){
-    let user = await User.findByIdAndUpdate(userId, {name, email, userPhotoLink}, {new: true});
+async function updateProfile(userId, name, email, userPhotoLink) {
+    let user = await User.findByIdAndUpdate(userId, { name, email, userPhotoLink }, { new: true });
 
-    if(!user)
-    {
+    if (!user) {
         throw new createHttpError.NotFound("User with given details doesn't exist");
     }
 
     return user
 }
 
-module.exports = {signup, signin, getUserProfile, refreshToken, signout, addUser, deleteUser, editUser, viewUsers, updateProfile}
+module.exports = { signup, signin, getUserProfile, refreshToken, signout, addUser, deleteUser, editUser, viewUsers, updateProfile }
